@@ -26,8 +26,8 @@ describe('Create Transaction from raw data', function () {
       amountOfUnits: 1323200,
       divisibility: 3,
       lockStatus: false,
-      protocol: 0x1302, // Error when start with 0
-      version: 0x13,
+      protocol: 0x4343,
+      version: 0x01,
       sha2: sha2,
       torrentHash: torrentHash,
       payments: [

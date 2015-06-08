@@ -1,5 +1,5 @@
-var PROTOCOL = 0x12
-var VERSION = 0x11
+var PROTOCOL = 0x4343
+var VERSION = 0x01
 
 var OP_CODES = {
   'issuance': {
