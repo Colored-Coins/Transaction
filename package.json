@@ -1,0 +1,25 @@
+{
+  "name": "cc-transaction",
+  "version": "0.1.0",
+  "description": "The encoding/decoding functions for the colored-coins scheme issuance set of OP_CODES",
+  "main": "Transaction.js",
+  "dependencies": {
+    "cc-issuance-encoder": "^0.1.0",
+    "cc-transfer-encoder": "^0.1.0"
+  },
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+     "test": "mocha",
+     "coverage": "istanbul cover _mocha -- -R spec",
+     "coveralls": "cat ./coverage/lcov.info | coveralls"
+  },
+  "author": "thehobbit85",
+  "license": "MIT",
+  "keywords": ["colored coins", "bitcoin", "blockchain"],
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/Colored-Coins/Issuance-Encoder.git"
+  }
+}
