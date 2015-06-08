@@ -63,8 +63,7 @@ function Transaction (data) {
   data = data || {}
   this.type = data.type || 'transfer'
   this.noRules = data.noRules || true
-  this.payments = data.payments || []
-  this.payments = paymentsSkipToInput(this.payments)
+  this.payments = paymentsSkipToInput(data.payments)
   this.protocol = data.protocol
   this.version = data.version
   if (typeof data.amountOfUnits !== 'undefined'
