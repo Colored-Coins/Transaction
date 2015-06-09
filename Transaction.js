@@ -1,6 +1,6 @@
 var PROTOCOL = 0x4343
 var VERSION = 0x01
-
+var MAXBYTESIZE = 40
 var OP_CODES = {
   'issuance': {
     'start': 0x00,
@@ -13,8 +13,6 @@ var OP_CODES = {
     'encoder': require('cc-transfer-encoder')
   }
 }
-
-var MAXBYTESIZE = 40
 
 var encodingLookup = {}
 
@@ -63,19 +61,18 @@ function Transaction (data) {
   data = data || {}
   this.type = data.type || 'transfer'
   this.noRules = data.noRules || true
-  this.payments = paymentsSkipToInput(data.payments)
-  this.protocol = data.protocol
-  this.version = data.version
-  if (typeof data.amountOfUnits !== 'undefined'
-    && typeof data.lockStatus !== 'undefined'
-    && typeof data.divisibility !== 'undefined') {
-    this.type = 'issuance'
-    this.divisibility = data.divisibility
-    this.lockStatus = data.lockStatus
-    this.amount = data.amountOfUnits / Math.pow(10, data.divisibility)
+  this.payments = data.payments || []
+  this.protocol = data.protocol || PROTOCOL
+  this.version = data.version || VERSION
+  this.lockStatus = data.lockStatus
+  this.divisibility = data.divisibility
+  this.amountOfUnits = data.amountOfUnits
+  if (typeof this.amountOfUnits !== 'undefined'
+    && typeof this.divisibility !== 'undefined') {
+    this.amount = this.amountOfUnits / Math.pow(10, this.divisibility)
   }
-  if (data.sha2) this.sha2 = data.sha2
-  if (data.torrentHash) this.torrentHash = data.torrentHash
+  this.sha2 = data.sha2
+  this.torrentHash = data.torrentHash
 }
 
 Transaction.createFromHex = function (op_return) {
@@ -85,28 +82,30 @@ Transaction.createFromHex = function (op_return) {
   var decoder = encodingLookup[op_return[3]]
   var rawData = decoder.decode(op_return)
   rawData.type = decoder.type
+  rawData.payments = paymentsSkipToInput(rawData.payments)
   return new Transaction(rawData)
 }
 
 Transaction.newTransaction = function (protocol, version) {
-  protocol = protocol || PROTOCOL
-  version = version || VERSION
-  return new Transaction({data: {protocol: protocol, version: version}})
+  return new Transaction({protocol: protocol, version: version})
 }
 
 Transaction.prototype.addPayment = function (input, amount, output, range, precent) {
   range = range || false
   precent = precent || false
-  this.payments.push({input: input, amount: amount, output: output, range: range, precent: precent})
+  this.payments.push({input: input, amountOfUnits: amount, output: output, range: range, precent: precent})
 }
 
-Transaction.prototype.setAmount = function (totalAmount, divisibility) {
-  divisibility = divisibility || 0
-  this.amount = totalAmount
+Transaction.prototype.setAmount = function (amount, divisibility) {
+  this.type = 'issuance'
+  this.divisibility = divisibility || 0
+  this.amount = amount
+  this.amountOfUnits = this.amount * Math.pow(10, this.divisibility)
 }
 
 Transaction.prototype.setLockStatus = function (lockStatus) {
   this.lockStatus = lockStatus
+  this.type = 'issuance'
 }
 
 Transaction.prototype.allowRules = function () {
@@ -119,31 +118,33 @@ Transaction.prototype.setHash = function (torrentHash, sha2) {
   if (sha2) this.sha2 = sha2
 }
 
-Transaction.prototype.isIssue = function () {
-  return (typeof this.divisibility !== 'undefined'
-    && typeof this.amount !== 'undefined'
-    && typeof this.lockStatus !== 'undefined')
+Transaction.prototype.encode = function () {
+  var encoder = OP_CODES[this.type].encoder
+  this.payments = paymentsInputToSkip(this.payments)
+  var result = encoder.encode(this, MAXBYTESIZE)
+  this.payments = paymentsSkipToInput(this.payments)
+  // console.log(this)
+  return result
 }
 
-Transaction.prototype.encode = function () {
+Transaction.prototype.toJson = function () {
   var data = {}
-  data.payments = paymentsInputToSkip(this.payments)
+  data.payments = this.payments
   data.protocol = this.protocol
   data.version = this.version
-  if (typeof this.divisibility !== 'undefined'
-    && typeof this.amount !== 'undefined'
-    && typeof this.lockStatus !== 'undefined') {
-    this.type = 'issuance'
+  data.type = this.type
+  if (this.type === 'issuance') {
     data.lockStatus = this.lockStatus
-    data.amountOfUnits = this.amount * Math.pow(10, this.divisibility)
     data.divisibility = this.divisibility
+    data.amount = this.amount
+    data.amountOfUnits = this.amount * Math.pow(10, this.divisibility)
   }
+
   if (this.torrentHash) {
-    data.torrentHash = this.torrentHash
-    if (this.sha2) data.sha2 = this.sha2
+    data.torrentHash = this.torrentHash.toString('hex')
+    if (this.sha2) data.sha2 = this.sha2.toString('hex')
   }
-  var encoder = OP_CODES[this.type].encoder
-  return encoder.encode(data, MAXBYTESIZE)
+  return data
 }
 
 module.exports = Transaction
