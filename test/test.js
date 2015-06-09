@@ -59,8 +59,19 @@ describe('Create Transaction from raw data', function () {
     done()
   })
 
-  it('should return the right encoding/decoding for newly created transaction', function (done) {
+  it('should encode an empty transfer transaction', function (done) {
     transaction = Transaction.newTransaction()
+    transactionJson1 = transaction.toJson()
+    // console.log('Second transaction Object: ', transaction)
+    code = transaction.encode()
+    // console.log('Second transaction code: ', code)
+    transactionJson2 = Transaction.createFromHex(code.codeBuffer).toJson()
+    // console.log('second transaction decoded back: ', transactionJson2)
+    assert.deepEqual(transactionJson1, transactionJson2, 'Not Equal')
+    done()
+  })
+
+  it('should return the right encoding/decoding for newly created transaction', function (done) {
     transaction.addPayment(0, 12, 3)
     transaction.addPayment(0, 12, 3, true)
     transaction.addPayment(1, 132, 1, false, true)
@@ -78,6 +89,25 @@ describe('Create Transaction from raw data', function () {
     transaction.setAmount(123, 4)
     transaction.setLockStatus(false)
     transaction.addPayment(2, 132, 4)
+    transactionJson1 = transaction.toJson()
+    // console.log('Second transaction Object: ', transaction)
+    code = transaction.encode()
+    // console.log('Second transaction code: ', code)
+    transactionJson2 = Transaction.createFromHex(code.codeBuffer).toJson()
+    // console.log('second transaction decoded back: ', transactionJson2)
+    assert.deepEqual(transactionJson1, transactionJson2, 'Not Equal')
+    done()
+  })
+
+  it('should encode an empty issuance transaction', function (done) {
+    transaction = Transaction.newTransaction(0x4343, 0x01)
+    var a = {}
+    assert.throws(function () {
+      transaction.setAmount(a.c, a.d)
+    }, 'Amount has to be defined'
+    , 'Amount has to be defined')
+    transaction.setLockStatus(false)
+    transaction.setAmount(10, 3)
     transactionJson1 = transaction.toJson()
     // console.log('Second transaction Object: ', transaction)
     code = transaction.encode()

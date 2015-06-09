@@ -97,6 +97,7 @@ Transaction.prototype.addPayment = function (input, amount, output, range, prece
 }
 
 Transaction.prototype.setAmount = function (amount, divisibility) {
+  if (typeof amount === 'undefined') throw new Error('Amount has to be defined')
   this.type = 'issuance'
   this.divisibility = divisibility || 0
   this.amount = amount
