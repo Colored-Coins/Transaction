@@ -67,6 +67,7 @@ function Transaction (data) {
   this.lockStatus = data.lockStatus
   this.divisibility = data.divisibility
   this.amountOfUnits = data.amountOfUnits
+  this.multiSig = data.multiSig || []
   if (typeof this.amountOfUnits !== 'undefined'
     && typeof this.divisibility !== 'undefined') {
     this.amount = this.amountOfUnits / Math.pow(10, this.divisibility)
@@ -75,7 +76,7 @@ function Transaction (data) {
   this.torrentHash = data.torrentHash
 }
 
-Transaction.createFromHex = function (op_return) {
+Transaction.fromHex = function (op_return) {
   if (!Buffer.isBuffer(op_return)) {
     op_return = new Buffer(op_return, 'hex')
   }
@@ -124,7 +125,6 @@ Transaction.prototype.encode = function () {
   this.payments = paymentsInputToSkip(this.payments)
   var result = encoder.encode(this, MAXBYTESIZE)
   this.payments = paymentsSkipToInput(this.payments)
-  // console.log(this)
   return result
 }
 
@@ -140,7 +140,7 @@ Transaction.prototype.toJson = function () {
     data.amount = this.amount
     data.amountOfUnits = this.amount * Math.pow(10, this.divisibility)
   }
-
+  data.multiSig = this.multiSig
   if (this.torrentHash) {
     data.torrentHash = this.torrentHash.toString('hex')
     if (this.sha2) data.sha2 = this.sha2.toString('hex')

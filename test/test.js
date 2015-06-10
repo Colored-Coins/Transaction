@@ -25,18 +25,21 @@ describe('Create Transaction from raw data', function () {
     ]
   }
   var transaction = new Transaction(data)
-  var transactionJson1, transactionJson2, code
+  var transactionJson1, transactionJson2, code, multiSig
   it('should return the right encoding/decoding for raw created transaction', function (done) {
     transactionJson1 = transaction.toJson()
     // console.log('First transaction Object: ', transactionJson1)
     code = transaction.encode()
     // console.log('First transaction code: ', code)
-    transactionJson2 = Transaction.createFromHex(code.codeBuffer).toJson()
+    transactionJson2 = Transaction.fromHex(code.codeBuffer).toJson()
     // console.log('First transaction decoded back: ', transactionJson2)
+    multiSig = transactionJson2.multiSig
+    transactionJson2.multiSig = []
     delete transactionJson1.sha2
     delete transactionJson1.torrentHash
     delete transactionJson2.sha2
     delete transactionJson2.torrentHash
+    assert.deepEqual(multiSig, [{'hashType': 'sha2', 'index': 1}], 'Not Equal')
     assert.deepEqual(transactionJson1, transactionJson2, 'Not Equal')
     done()
   })
@@ -46,12 +49,15 @@ describe('Create Transaction from raw data', function () {
     // console.log('Second transaction Object: ', transactionJson1)
     code = transaction.encode()
     // console.log('Second transaction code: ', code)
-    transactionJson2 = Transaction.createFromHex(code.codeBuffer).toJson()
+    transactionJson2 = Transaction.fromHex(code.codeBuffer).toJson()
     // console.log('second transaction decoded back: ', transactionJson2)
+    multiSig = transactionJson2.multiSig
+    transactionJson2.multiSig = []
     delete transactionJson1.sha2
     delete transactionJson1.torrentHash
     delete transactionJson2.sha2
     delete transactionJson2.torrentHash
+    assert.deepEqual(multiSig, [{'hashType': 'sha2', 'index': 1}], 'Not Equal')
     assert.deepEqual(transactionJson1, transactionJson2, 'Not Equal')
     assert.equal(transactionJson2.amountOfUnits, 1230000, 'Wrong total amount of units')
     assert.equal(transactionJson1.amountOfUnits, 1230000, 'Wrong total amount of units')
@@ -65,7 +71,7 @@ describe('Create Transaction from raw data', function () {
     // console.log('Second transaction Object: ', transaction)
     code = transaction.encode()
     // console.log('Second transaction code: ', code)
-    transactionJson2 = Transaction.createFromHex(code.codeBuffer).toJson()
+    transactionJson2 = Transaction.fromHex(code.codeBuffer).toJson()
     // console.log('second transaction decoded back: ', transactionJson2)
     assert.deepEqual(transactionJson1, transactionJson2, 'Not Equal')
     done()
@@ -79,7 +85,7 @@ describe('Create Transaction from raw data', function () {
     // console.log('Second transaction Object: ', transaction)
     code = transaction.encode()
     // console.log('Second transaction code: ', code)
-    transactionJson2 = Transaction.createFromHex(code.codeBuffer).toJson()
+    transactionJson2 = Transaction.fromHex(code.codeBuffer).toJson()
     // console.log('second transaction decoded back: ', transactionJson2)
     assert.deepEqual(transactionJson1, transactionJson2, 'Not Equal')
     done()
@@ -93,7 +99,7 @@ describe('Create Transaction from raw data', function () {
     // console.log('Second transaction Object: ', transaction)
     code = transaction.encode()
     // console.log('Second transaction code: ', code)
-    transactionJson2 = Transaction.createFromHex(code.codeBuffer).toJson()
+    transactionJson2 = Transaction.fromHex(code.codeBuffer).toJson()
     // console.log('second transaction decoded back: ', transactionJson2)
     assert.deepEqual(transactionJson1, transactionJson2, 'Not Equal')
     done()
@@ -112,7 +118,7 @@ describe('Create Transaction from raw data', function () {
     // console.log('Second transaction Object: ', transaction)
     code = transaction.encode()
     // console.log('Second transaction code: ', code)
-    transactionJson2 = Transaction.createFromHex(code.codeBuffer).toJson()
+    transactionJson2 = Transaction.fromHex(code.codeBuffer).toJson()
     // console.log('second transaction decoded back: ', transactionJson2)
     assert.deepEqual(transactionJson1, transactionJson2, 'Not Equal')
     done()

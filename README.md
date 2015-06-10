@@ -22,6 +22,7 @@ this.lockStatus
 this.amount
 this.sha2
 this.torrentHash
+this.multiSig
 ```
 
 
