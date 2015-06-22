@@ -38,6 +38,7 @@ Transaction.prototype.setLockStatus = function (lockStatus)
 Transaction.prototype.setHash = function (torrentHash, sha2)
 Transaction.prototype.isIssue = function ()
 Transaction.prototype.encode = function ()
+Transaction.prototype.shiftOutputs = function(shiftAmount)
 
 ```
 

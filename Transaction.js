@@ -114,6 +114,13 @@ Transaction.prototype.allowRules = function () {
   this.noRules = false
 }
 
+Transaction.prototype.shiftOutputs = function (shiftAmount) {
+  shiftAmount = shiftAmount || 1
+  this.payments.forEach(function (payment) {
+    payment.output += shiftAmount
+  })
+}
+
 Transaction.prototype.setHash = function (torrentHash, sha2) {
   if (!torrentHash) throw new Error('Can\'t set hashes without the torrent hash')
   if (!Buffer.isBuffer(torrentHash)) torrentHash = new Buffer(torrentHash, 'hex')
