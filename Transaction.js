@@ -116,8 +116,12 @@ Transaction.prototype.allowRules = function () {
 
 Transaction.prototype.setHash = function (torrentHash, sha2) {
   if (!torrentHash) throw new Error('Can\'t set hashes without the torrent hash')
+  if (!Buffer.isBuffer(torrentHash)) torrentHash = new Buffer(torrentHash, 'hex')
   this.torrentHash = torrentHash
-  if (sha2) this.sha2 = sha2
+  if (sha2) {
+    if (!Buffer.isBuffer(sha2)) sha2 = new Buffer(sha2, 'hex')
+    this.sha2 = sha2
+  }
 }
 
 Transaction.prototype.encode = function () {
