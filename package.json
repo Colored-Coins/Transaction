@@ -1,11 +1,11 @@
 {
   "name": "cc-transaction",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "The encoding/decoding functions for the colored-coins scheme issuance set of OP_CODES",
   "main": "Transaction.js",
   "dependencies": {
-    "cc-issuance-encoder": "^0.3.1",
-    "cc-transfer-encoder": "^0.3.1"
+    "cc-issuance-encoder": "^0.3.3",
+    "cc-transfer-encoder": "^0.3.2"
   },
   "directories": {
     "test": "test"

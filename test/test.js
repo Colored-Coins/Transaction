@@ -5,7 +5,7 @@ describe('Create Transaction from raw data', function () {
   this.timeout(0)
   var torrentHash = new Buffer(20)
   var sha2 = new Buffer(32)
-
+  var hex3 = '434301028d5e6b9e6543d917e9a1a35e3680dabc4922750c201201201210'
   var data = {
     type: 'issuance',
     amountOfUnits: 1323200,
@@ -32,6 +32,7 @@ describe('Create Transaction from raw data', function () {
     code = transaction.encode()
     // console.log('First transaction code: ', code)
     transactionJson2 = Transaction.fromHex(code.codeBuffer).toJson()
+    console.log('transactionJson23', Transaction.fromHex(hex3).toJson())
     // console.log('First transaction decoded back: ', transactionJson2)
     multiSig = transactionJson2.multiSig
     transactionJson2.multiSig = []
