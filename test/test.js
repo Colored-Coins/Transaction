@@ -16,12 +16,12 @@ describe('Create Transaction from raw data', function () {
     sha2: sha2,
     torrentHash: torrentHash,
     payments: [
-      {input: 0, range: false, precent: false, output: 0, amountOfUnits: 1},
-      {input: 0, range: false, precent: false, output: 1, amountOfUnits: 2},
-      {input: 1, range: false, precent: false, output: 2, amountOfUnits: 3},
-      {input: 2, range: false, precent: false, output: 3, amountOfUnits: 4},
-      {input: 2, range: false, precent: false, output: 4, amountOfUnits: 5},
-      {input: 3, range: false, precent: false, output: 5, amountOfUnits: 6}
+      {input: 0, range: false, percent: false, output: 0, amountOfUnits: 1},
+      {input: 0, range: false, percent: false, output: 1, amountOfUnits: 2},
+      {input: 1, range: false, percent: false, output: 2, amountOfUnits: 3},
+      {input: 2, range: false, percent: false, output: 3, amountOfUnits: 4},
+      {input: 2, range: false, percent: false, output: 4, amountOfUnits: 5},
+      {input: 3, range: false, percent: false, output: 5, amountOfUnits: 6}
     ]
   }
   var transaction = new Transaction(data)

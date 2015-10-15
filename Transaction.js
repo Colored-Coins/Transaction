@@ -50,7 +50,7 @@ var paymentsSkipToInput = function (payments) {
       amountOfUnits: payments[i].amountOfUnits,
       output: payments[i].output,
       range: payments[i].range,
-      precent: payments[i].precent
+      percent: payments[i].percent
     })
     if (payments[i].skip) input = input + 1
   }
@@ -91,10 +91,10 @@ Transaction.newTransaction = function (protocol, version) {
   return new Transaction({protocol: protocol, version: version})
 }
 
-Transaction.prototype.addPayment = function (input, amount, output, range, precent) {
+Transaction.prototype.addPayment = function (input, amount, output, range, percent) {
   range = range || false
-  precent = precent || false
-  this.payments.push({input: input, amountOfUnits: amount, output: output, range: range, precent: precent})
+  percent = percent || false
+  this.payments.push({input: input, amountOfUnits: amount, output: output, range: range, percent: percent})
 }
 
 Transaction.prototype.setAmount = function (amount, divisibility) {
