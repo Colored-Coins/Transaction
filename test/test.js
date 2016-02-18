@@ -8,11 +8,11 @@ describe('Create Transaction from raw data', function () {
   var hex3 = '434301028d5e6b9e6543d917e9a1a35e3680dabc4922750c201201201210'
   var data = {
     type: 'issuance',
-    amount: 1323200,
-    divisibility: 3,
+    amount: 13232,     
+    divisibility: 2,
     lockStatus: false,
     protocol: 0x4343,
-    version: 0x01,
+    version: 0x02,
     sha2: sha2,
     torrentHash: torrentHash,
     payments: [
@@ -26,13 +26,14 @@ describe('Create Transaction from raw data', function () {
   }
   var transaction = new Transaction(data)
   var transactionJson1, transactionJson2, code, multiSig
+
   it('should return the right encoding/decoding for raw created transaction', function (done) {
     transactionJson1 = transaction.toJson()
     // console.log('First transaction Object: ', transactionJson1)
     code = transaction.encode()
     // console.log('First transaction code: ', code)
     transactionJson2 = Transaction.fromHex(code.codeBuffer).toJson()
-    console.log('transactionJson23', Transaction.fromHex(hex3).toJson())
+    // console.log('transactionJson3', Transaction.fromHex(hex3).toJson())
     // console.log('First transaction decoded back: ', transactionJson2)
     multiSig = transactionJson2.multiSig
     transactionJson2.multiSig = []
@@ -44,6 +45,32 @@ describe('Create Transaction from raw data', function () {
     assert.deepEqual(transactionJson1, transactionJson2, 'Not Equal')
     done()
   })
+
+  it('should return right encoded amount for version 0x02', function (done) {
+    var consumer = function (buff) {
+      var curr = 0
+      return function consume (len) {
+        return buff.slice(curr, curr += len)
+      }
+    }
+
+    var toBuffer = function (val) {
+      val = val.toString(16)
+      if (val.length % 2 == 1) {
+        val = '0'+val
+      }
+      return new Buffer(val, 'hex')
+    }
+
+    var consume = consumer(code.codeBuffer.slice(0, code.codeBuffer.length - 1))
+    assert.deepEqual(toBuffer(transactionJson1.protocol), consume(2))
+    assert.deepEqual(toBuffer(transactionJson1.version), consume(1))
+    assert.deepEqual(toBuffer('02'), consume(1))  //issuance OP_CODE
+    consume(20) //torrent-hash
+    assert.deepEqual(new Buffer('433b00', 'hex'), consume(3))
+    done()
+  })
+
   it('should return the right encoding/decoding for changed amount', function (done) {
     transaction.setAmount(123, 4)
     transactionJson1 = transaction.toJson()
@@ -60,8 +87,8 @@ describe('Create Transaction from raw data', function () {
     delete transactionJson2.torrentHash
     assert.deepEqual(multiSig, [{'hashType': 'sha2', 'index': 1}], 'Not Equal')
     assert.deepEqual(transactionJson1, transactionJson2, 'Not Equal')
-    assert.equal(transactionJson2.amount, 1230000, 'Wrong total amount of units')
-    assert.equal(transactionJson1.amount, 1230000, 'Wrong total amount of units')
+    assert.equal(transactionJson2.amount, 123, 'Wrong total amount of units')
+    assert.equal(transactionJson1.amount, 123, 'Wrong total amount of units')
 
     done()
   })
@@ -107,7 +134,7 @@ describe('Create Transaction from raw data', function () {
   })
 
   it('should encode an empty issuance transaction', function (done) {
-    transaction = Transaction.newTransaction(0x4343, 0x01)
+    transaction = Transaction.newTransaction(0x4343, 0x02)
     var a = {}
     assert.throws(function () {
       transaction.setAmount(a.c, a.d)

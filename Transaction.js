@@ -1,5 +1,5 @@
 var PROTOCOL = 0x4343
-var VERSION = 0x01
+var VERSION = 0x02
 var MAXBYTESIZE = 40
 var OP_CODES = {
   'issuance': {
@@ -93,6 +93,10 @@ Transaction.prototype.addPayment = function (input, amount, output, range, perce
   this.payments.push({input: input, amount: amount, output: output, range: range, percent: percent})
 }
 
+/**
+ * @param {Number=} amount - the amount of units of the asset to issue. Integer.
+ * @param {Number=} divisibility - the divisibility of the asset to issue - how many decimal points can an asset unit have. Integer.
+ */
 Transaction.prototype.setAmount = function (amount, divisibility) {
   if (typeof amount === 'undefined') throw new Error('Amount has to be defined')
   this.type = 'issuance'
