@@ -8,7 +8,7 @@ describe('Create Transaction from raw data', function () {
   var hex3 = '434301028d5e6b9e6543d917e9a1a35e3680dabc4922750c201201201210'
   var data = {
     type: 'issuance',
-    amountOfUnits: 1323200,
+    amount: 1323200,
     divisibility: 3,
     lockStatus: false,
     protocol: 0x4343,
@@ -16,12 +16,12 @@ describe('Create Transaction from raw data', function () {
     sha2: sha2,
     torrentHash: torrentHash,
     payments: [
-      {input: 0, range: false, percent: false, output: 0, amountOfUnits: 1},
-      {input: 0, range: false, percent: false, output: 1, amountOfUnits: 2},
-      {input: 1, range: false, percent: false, output: 2, amountOfUnits: 3},
-      {input: 2, range: false, percent: false, output: 3, amountOfUnits: 4},
-      {input: 2, range: false, percent: false, output: 4, amountOfUnits: 5},
-      {input: 3, range: false, percent: false, output: 5, amountOfUnits: 6}
+      {input: 0, range: false, percent: false, output: 0, amount: 1},
+      {input: 0, range: false, percent: false, output: 1, amount: 2},
+      {input: 1, range: false, percent: false, output: 2, amount: 3},
+      {input: 2, range: false, percent: false, output: 3, amount: 4},
+      {input: 2, range: false, percent: false, output: 4, amount: 5},
+      {input: 3, range: false, percent: false, output: 5, amount: 6}
     ]
   }
   var transaction = new Transaction(data)
@@ -60,8 +60,8 @@ describe('Create Transaction from raw data', function () {
     delete transactionJson2.torrentHash
     assert.deepEqual(multiSig, [{'hashType': 'sha2', 'index': 1}], 'Not Equal')
     assert.deepEqual(transactionJson1, transactionJson2, 'Not Equal')
-    assert.equal(transactionJson2.amountOfUnits, 1230000, 'Wrong total amount of units')
-    assert.equal(transactionJson1.amountOfUnits, 1230000, 'Wrong total amount of units')
+    assert.equal(transactionJson2.amount, 1230000, 'Wrong total amount of units')
+    assert.equal(transactionJson1.amount, 1230000, 'Wrong total amount of units')
 
     done()
   })

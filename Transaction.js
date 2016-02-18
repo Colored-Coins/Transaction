@@ -47,7 +47,7 @@ var paymentsSkipToInput = function (payments) {
   for (var i = 0; i < payments.length; i++) {
     paymentsDecoded.push({
       input: input,
-      amountOfUnits: payments[i].amountOfUnits,
+      amount: payments[i].amount,
       output: payments[i].output,
       range: payments[i].range,
       percent: payments[i].percent
@@ -66,12 +66,8 @@ function Transaction (data) {
   this.version = data.version || VERSION
   this.lockStatus = data.lockStatus
   this.divisibility = data.divisibility
-  this.amountOfUnits = data.amountOfUnits
   this.multiSig = data.multiSig || []
-  if (typeof this.amountOfUnits !== 'undefined'
-    && typeof this.divisibility !== 'undefined') {
-    this.amount = this.amountOfUnits / Math.pow(10, this.divisibility)
-  }
+  this.amount = data.amount
   this.sha2 = data.sha2
   this.torrentHash = data.torrentHash
 }
@@ -94,7 +90,7 @@ Transaction.newTransaction = function (protocol, version) {
 Transaction.prototype.addPayment = function (input, amount, output, range, percent) {
   range = range || false
   percent = percent || false
-  this.payments.push({input: input, amountOfUnits: amount, output: output, range: range, percent: percent})
+  this.payments.push({input: input, amount: amount, output: output, range: range, percent: percent})
 }
 
 Transaction.prototype.setAmount = function (amount, divisibility) {
@@ -102,7 +98,6 @@ Transaction.prototype.setAmount = function (amount, divisibility) {
   this.type = 'issuance'
   this.divisibility = divisibility || 0
   this.amount = amount
-  this.amountOfUnits = this.amount * Math.pow(10, this.divisibility)
 }
 
 Transaction.prototype.setLockStatus = function (lockStatus) {
@@ -149,7 +144,6 @@ Transaction.prototype.toJson = function () {
     data.lockStatus = this.lockStatus
     data.divisibility = this.divisibility
     data.amount = this.amount
-    data.amountOfUnits = this.amount * Math.pow(10, this.divisibility)
   }
   data.multiSig = this.multiSig
   if (this.torrentHash) {
