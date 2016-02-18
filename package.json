@@ -4,8 +4,8 @@
   "description": "The encoding/decoding functions for the colored-coins scheme issuance set of OP_CODES",
   "main": "Transaction.js",
   "dependencies": {
-    "cc-issuance-encoder": "^0.3.3",
-    "cc-transfer-encoder": "^0.3.2"
+    "cc-issuance-encoder": "^1.0.0",
+    "cc-transfer-encoder": "^1.0.0"
   },
   "directories": {
     "test": "test"
