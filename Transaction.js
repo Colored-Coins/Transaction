@@ -1,6 +1,6 @@
 var PROTOCOL = 0x4343
 var VERSION = 0x02
-var MAXBYTESIZE = 40
+var MAXBYTESIZE = 80
 var OP_CODES = {
   'issuance': {
     'start': 0x00,
