@@ -41,7 +41,7 @@ describe('Create Transaction from raw data', function () {
     delete transactionJson1.torrentHash
     delete transactionJson2.sha2
     delete transactionJson2.torrentHash
-    assert.deepEqual(multiSig, [{'hashType': 'sha2', 'index': 1}], 'Not Equal')
+    assert.deepEqual(multiSig, [], 'Not Equal')
     assert.deepEqual(transactionJson1, transactionJson2, 'Not Equal')
     done()
   })
@@ -65,8 +65,9 @@ describe('Create Transaction from raw data', function () {
     var consume = consumer(code.codeBuffer.slice(0, code.codeBuffer.length - 1))
     assert.deepEqual(toBuffer(transactionJson1.protocol), consume(2))
     assert.deepEqual(toBuffer(transactionJson1.version), consume(1))
-    assert.deepEqual(toBuffer('02'), consume(1))  //issuance OP_CODE
+    assert.deepEqual(toBuffer('01'), consume(1))  //issuance OP_CODE
     consume(20) //torrent-hash
+    consume(32) //sha2
     assert.deepEqual(new Buffer('433b00', 'hex'), consume(3))
     done()
   })
@@ -85,7 +86,7 @@ describe('Create Transaction from raw data', function () {
     delete transactionJson1.torrentHash
     delete transactionJson2.sha2
     delete transactionJson2.torrentHash
-    assert.deepEqual(multiSig, [{'hashType': 'sha2', 'index': 1}], 'Not Equal')
+    assert.deepEqual(multiSig, [], 'Not Equal')
     assert.deepEqual(transactionJson1, transactionJson2, 'Not Equal')
     assert.equal(transactionJson2.amount, 123, 'Wrong total amount of units')
     assert.equal(transactionJson1.amount, 123, 'Wrong total amount of units')
