@@ -109,6 +109,11 @@ Transaction.prototype.setLockStatus = function (lockStatus) {
   this.type = 'issuance'
 }
 
+Transaction.prototype.setAggregationPolicy = function (aggregationPolicy) {
+  this.aggregationPolicy = aggregationPolicy || 'aggregatable'
+  this.type = 'issuance'
+}
+
 Transaction.prototype.allowRules = function () {
   this.noRules = false
 }
