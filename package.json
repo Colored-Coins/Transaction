@@ -4,7 +4,7 @@
   "description": "The encoding/decoding functions for the colored-coins scheme issuance set of OP_CODES",
   "main": "Transaction.js",
   "dependencies": {
-    "cc-issuance-encoder": "^1.0.0",
+    "cc-issuance-encoder": "git+https://github.com/Colored-Coins/Issuance-Encoder.git#aggregatable_assets",
     "cc-transfer-encoder": "^1.0.0"
   },
   "directories": {
