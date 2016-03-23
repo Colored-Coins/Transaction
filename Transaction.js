@@ -65,6 +65,7 @@ function Transaction (data) {
   this.protocol = data.protocol || PROTOCOL
   this.version = data.version || VERSION
   this.lockStatus = data.lockStatus
+  this.aggregationPolicy = data.aggregationPolicy || 'aggregatable'
   this.divisibility = data.divisibility
   this.multiSig = data.multiSig || []
   this.amount = data.amount
