@@ -152,6 +152,7 @@ Transaction.prototype.toJson = function () {
   data.type = this.type
   if (this.type === 'issuance') {
     data.lockStatus = this.lockStatus
+    data.aggregationPolicy = this.aggregationPolicy
     data.divisibility = this.divisibility
     data.amount = this.amount
   }
