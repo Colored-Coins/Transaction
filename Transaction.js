@@ -50,13 +50,11 @@ var paymentsSkipToInput = function (payments) {
   var paymentsDecoded = []
   var input = 0
   for (var i = 0; i < payments.length; i++) {
-    paymentsDecoded.push({
-      input: input,
-      amount: payments[i].amount,
-      output: payments[i].output,
-      range: payments[i].range,
-      percent: payments[i].percent
-    })
+    var paymentDecoded = payments[i].burn ? {burn: true} : {range: payments[i].range, output: payments[i].output}
+    paymentDecoded.input = input
+    paymentDecoded.percent = payments[i].percent
+    paymentDecoded.amount = payments[i].amount
+    paymentsDecoded.push(paymentDecoded)
     if (payments[i].skip) input = input + 1
   }
   return paymentsDecoded
