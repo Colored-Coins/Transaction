@@ -11,19 +11,30 @@ Colored Coins Transaction provides the basic functionality for creating and mana
 $ npm install cc-transaction
 ```
 
-### TODO - Write documentation to the following properties
+### properties
 
 ```js
+// which type is the transaction ('issue'/'send'/'burn') [String]
 this.type
+// [Boolean]
 this.noRules
+// transfer objects to pass assets from inputs to outputs [Array[Object]] 
 this.payments
+// [Number]
 this.protocol
+// Colored-Coins protocol version [Number]
 this.version
+// how many places after the decimal point can the smallest asset amount be (for example divisibility 2 => smallest asset amount is 0.01) [Number]
 this.divisibility
+// is an issued asset locked or can it be re-issued [Boolean]
 this.lockStatus
+// amount of units of an asset to issue [Number]
 this.amount
+// SHA2 of the metadata [Buffer]
 this.sha2
+// the torrent hash of the metadata torrent [Buffer]
 this.torrentHash
+// list of objects which indicate how a multisig stores the hashes (index and type) [Array[Object]]
 this.multiSig
 ```
 
@@ -32,13 +43,14 @@ this.multiSig
 
 ```js
 function Transaction (rawData)
-Transaction.createFromHex = function (op_return)
+Transaction.fromHex = function (op_return)
 Transaction.newTransaction = function (protocol, version)
 Transaction.prototype.addPayment = function (input, amount, output, range,percent)
+Transaction.prototype.addBurn = function (input, amount, percent)
 Transaction.prototype.setAmount = function (totalAmount, divisibility)
 Transaction.prototype.setLockStatus = function (lockStatus)
+Transaction.prototype.setAggregationPolicy = function (aggregationPolicy)
 Transaction.prototype.setHash = function (torrentHash, sha2)
-Transaction.prototype.isIssue = function ()
 Transaction.prototype.encode = function ()
 Transaction.prototype.shiftOutputs = function(shiftAmount)
 
