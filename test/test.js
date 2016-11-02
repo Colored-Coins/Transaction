@@ -110,6 +110,7 @@ describe('Create Transaction from raw data', function () {
     transaction.addPayment(0, 12, 3)
     transaction.addPayment(0, 12, 3, true)
     transaction.addPayment(1, 132, 1, false, true)
+    transaction.addBurn(1, 50, true)
     transactionJson1 = transaction.toJson()
     // console.log('Second transaction Object: ', transaction)
     code = transaction.encode()

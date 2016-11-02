@@ -11,6 +11,11 @@ var OP_CODES = {
     'start': 0x10,
     'end': 0x1f,
     'encoder': require('cc-transfer-encoder')
+  },
+  'burn': {
+    'start': 0x20,
+    'end': 0x2f,
+    'encoder': require('cc-transfer-encoder')
   }
 }
 
@@ -92,6 +97,11 @@ Transaction.prototype.addPayment = function (input, amount, output, range, perce
   range = range || false
   percent = percent || false
   this.payments.push({input: input, amount: amount, output: output, range: range, percent: percent})
+}
+
+Transaction.prototype.addBurn = function (input, amount, percent) {
+  this.payments.push({input: input, amount: amount, percent: percent, burn: true})
+  this.type = 'burn'
 }
 
 /**
