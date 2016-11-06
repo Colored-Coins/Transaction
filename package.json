@@ -5,7 +5,7 @@
   "main": "Transaction.js",
   "dependencies": {
     "cc-issuance-encoder": "^1.1.0",
-    "cc-transfer-encoder": "^1.0.0"
+    "cc-transfer-encoder": "git+https://github.com/Colored-Coins/Transfer-Encoder.git#COLU-948_burn"
   },
   "directories": {
     "test": "test"
