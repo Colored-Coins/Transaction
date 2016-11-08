@@ -11,6 +11,11 @@ var OP_CODES = {
     'start': 0x10,
     'end': 0x1f,
     'encoder': require('cc-transfer-encoder')
+  },
+  'burn': {
+    'start': 0x20,
+    'end': 0x2f,
+    'encoder': require('cc-transfer-encoder')
   }
 }
 
@@ -45,13 +50,11 @@ var paymentsSkipToInput = function (payments) {
   var paymentsDecoded = []
   var input = 0
   for (var i = 0; i < payments.length; i++) {
-    paymentsDecoded.push({
-      input: input,
-      amount: payments[i].amount,
-      output: payments[i].output,
-      range: payments[i].range,
-      percent: payments[i].percent
-    })
+    var paymentDecoded = payments[i].burn ? {burn: true} : {range: payments[i].range, output: payments[i].output}
+    paymentDecoded.input = input
+    paymentDecoded.percent = payments[i].percent
+    paymentDecoded.amount = payments[i].amount
+    paymentsDecoded.push(paymentDecoded)
     if (payments[i].skip) input = input + 1
   }
   return paymentsDecoded
@@ -92,6 +95,14 @@ Transaction.prototype.addPayment = function (input, amount, output, range, perce
   range = range || false
   percent = percent || false
   this.payments.push({input: input, amount: amount, output: output, range: range, percent: percent})
+}
+
+Transaction.prototype.addBurn = function (input, amount, percent) {
+  if (this.type === 'issuance') {
+    throw new Error('Can\'t add burn payment to an issuance transaction')
+  }
+  this.payments.push({input: input, amount: amount, percent: percent, burn: true})
+  this.type = 'burn'
 }
 
 /**

@@ -153,4 +153,19 @@ describe('Create Transaction from raw data', function () {
     done()
   })
 
+  it('should encode a burn transaction', function (done) {
+    transaction = Transaction.newTransaction(0x4343, 0x02)
+    transaction.addPayment(0, 7, 2)
+    transaction.addBurn(1, 5, false)
+    transactionJson1 = transaction.toJson()
+    // console.log('Second transaction Object: ', transactionJson1)
+    code = transaction.encode()
+    // console.log('Second transaction code: ', code)
+    transactionJson2 = Transaction.fromHex(code.codeBuffer).toJson()
+    // console.log('second transaction decoded back: ', transactionJson2)
+    assert.equal(transactionJson1.type, 'burn')
+    assert.deepEqual(transactionJson1, transactionJson2, 'Not Equal')
+    done()
+  })
+
 })
