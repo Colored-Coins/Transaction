@@ -133,7 +133,9 @@ Transaction.prototype.allowRules = function () {
 Transaction.prototype.shiftOutputs = function (shiftAmount) {
   shiftAmount = shiftAmount || 1
   this.payments.forEach(function (payment) {
-    payment.output += shiftAmount
+    if (!payment.burn) {
+      payment.output += shiftAmount
+    }
   })
 }
 
